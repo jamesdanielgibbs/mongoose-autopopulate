@@ -115,14 +115,22 @@ module.exports = function autopopulatePlugin(schema, options) {
 };
 
 function autopopulateDiscriminators(res) {
+  
   if (res == null) {
     return;
   }
+
   if (this._mongooseOptions != null && this._mongooseOptions.lean) {
     // If lean, we don't have a good way to figure out the discriminator
     // schema, and so skip autopopulating.
     return;
   }
+
+  const options = this.options || {};
+  if (options.autopopulate === false) {
+    return;
+  }
+
   if (!Array.isArray(res)) {
     res = [res];
   }
